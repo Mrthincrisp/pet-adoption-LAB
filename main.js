@@ -240,21 +240,23 @@ const pets = [
       imageUrl: "https://static.independent.co.uk/2022/03/23/15/newFile-7.jpg?quality=75&width=1200&auto=webp"
     }
   ];
-  const targetingApp = document.querySelector('#app') //targets/creates a variable; the container that will hold all the cards
+  const targetingApp = document.querySelector('.card-cont') //targets/creates a variable; the container that will hold all the cards
 
   const cardsOnDom = (array) => {
     let domString = "";
-    for (const pet of array) {
-      
-      domString += `<div id="app" class="card-cont" style="width: 18rem;">
+  
+    for (let i = 0; i < array.length ; i++) {
+      const pet = array[i];
+  
+      domString += `<div id="${pet.id}" class="card-cont" style="width: 18rem;">
         <img src=${pet.imageUrl} class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">${pet.name}</h5>
-          <p>Adoption id: ${pet.id} </p>
           <p class="card-text">${pet.specialSkill}</p>
           <footer class="grad" style="background-color:${pet.color};padding:5px; color: white; text-shadow: 2px 2px 2px black;">${pet.type}</footer>
         </div>
       </div>`;
+      
     }
     targetingApp.innerHTML = domString;
   };
@@ -283,3 +285,21 @@ dinoBtn.addEventListener("click", () => {const dinoArray = filter(pets, "dino");
   dogBtn.addEventListener("click", () => {const dogArray = filter(pets, "dog"); //click haves dom displays dog types
     cardsOnDom(dogArray);
   });
+
+const form = document.querySelector("form")
+
+const createPet = (e) =>{
+  e.preventDefault()
+    const newpetsObj = {
+        id: pets.length +1,
+        name: document.querySelector("#name").value,
+        color: document.querySelector("#color").value,
+        specialSkill: document.querySelector("#special-skill").value,
+        type: document.querySelector("#type").value,
+        imageUrl: document.querySelector("#image").value,
+      };
+    pets.push(newpetsObj);
+    cardsOnDom(pets)
+    form.reset();
+    };
+    form.addEventListener("submit",createPet)
