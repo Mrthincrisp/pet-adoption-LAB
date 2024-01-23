@@ -1,3 +1,5 @@
+let filterToggle = true
+
 const pets = [
     {
       id: 1,
@@ -240,28 +242,34 @@ const pets = [
       imageUrl: "https://static.independent.co.uk/2022/03/23/15/newFile-7.jpg?quality=75&width=1200&auto=webp"
     }
   ];
-  const targetingApp = document.querySelector('.card-cont') //targets/creates a variable; the container that will hold all the cards
+  
+
 
   const cardsOnDom = (array) => {
     let domString = "";
-  
+    
     for (let i = 0; i < array.length ; i++) {
       const pet = array[i];
-  
-      domString += `<div id="${pet.id}" class="card-cont" style="width: 18rem;">
-        <img src=${pet.imageUrl} class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${pet.name}</h5>
-          <p class="card-text">${pet.specialSkill}</p>
-          <footer class="grad" style="background-color:${pet.color};padding:5px; color: white; text-shadow: 2px 2px 2px black;">${pet.type}</footer>
+      
+      domString += `<div id=app class="card-cont" style="width: 18rem;">
+      <div class="card-body">
+      <img src=${pet.imageUrl} class="card-img-top" alt="...">
+      <h5 class="card-title"  style="background-color:${pet.color};padding: 5px; color: white; text-shadow: 2px 2px 2px black;"  >${pet.name}</h5>
+      <p class="card-text">${pet.specialSkill}</p>
+      <footer class="grad" >${pet.type}</footer>
+          <button class="btn danger" id="delete--${pet.id}">Delete</button>
         </div>
       </div>`;
       
-    }
-    targetingApp.innerHTML = domString;
+    }    
+    targetingApp.innerHTML = domString;  // entire function pushes 'cards' to the dom
   };
-  
-  const filter = (array, petType) => {return array.filter((member) => member.type === petType);
+
+  const targetingApp = document.querySelector('.card-cont') //targets/creates a variable; the container that will hold all the cards
+
+  const filter = (cardsOnDom, petType) =>{    //makes function with params -  cardsOnDom, petType
+  return cardsOnDom.filter((member) =>    // filter() creates a new array,  member is the element/key that gets processed 
+    member.type === petType);         // member.type is the same as type on obj pets.type
   };
   
   const allBtn = document.querySelector(`#all-btn`);
@@ -272,18 +280,26 @@ const pets = [
   cardsOnDom(pets);  // default display, shows pets(all)
 
   allBtn.addEventListener("click", () => {cardsOnDom(pets);  //click happens the dom displays pets
+  filterToggle = true
+  console.log(filterToggle)
   });
 
-dinoBtn.addEventListener("click", () => {const dinoArray = filter(pets, "dino");
-  cardsOnDom(dinoArray)
+dinoBtn.addEventListener("click", () => {const dinoArray = filter(pets, "dino"); // filter(array, petType)  ie pets and "dino"
+  cardsOnDom(dinoArray)  // pushes the new array from filter
+  filterToggle = false
+  console.log(dinoArray)
 });
 
   catBtn.addEventListener("click", () => {const catArray = filter(pets, "cat");
   cardsOnDom(catArray)
-  });
+  filterToggle = false
+  console.log(filterToggle)  
+});
   
-  dogBtn.addEventListener("click", () => {const dogArray = filter(pets, "dog"); //click haves dom displays dog types
-    cardsOnDom(dogArray);
+  dogBtn.addEventListener("click", () => {const dogArray = filter(pets, "dog"); 
+    cardsOnDom(dogArray)
+    filterToggle = false
+    console.log(filterToggle)
   });
 
 const form = document.querySelector("form")
@@ -303,3 +319,27 @@ const createPet = (e) =>{
     form.reset();
     };
     form.addEventListener("submit",createPet)
+
+
+
+const app = document.querySelector("#app");
+
+
+app.addEventListener("click", (e) =>{
+
+  if (e.target.id.includes("delete")) {
+    const[, id] = e.target.id.split("--");
+    const index = pets.findIndex((pet) => pet.id === Number(id));
+    const pet = pets.find((p) => p.id === Number(id))
+    pets.splice(index, 1);     
+    switch (filterToggle) {
+      case false:        
+        const currentArray = filter(pets, pet.type);
+        cardsOnDom(currentArray);
+        break;
+        default:
+        cardsOnDom(pets)  
+        break;
+  }
+  }
+});
