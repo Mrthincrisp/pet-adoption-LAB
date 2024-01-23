@@ -8,8 +8,29 @@ body{
   font-weight: 650;
   box-shadow: 5px 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 12px;
+  margin: 15px;
+}
+
+.danger{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: red;
+  font-size: small;
+  font-weight: bold;
+  color: black;
+  margin: 10px  
 }
 .btn:hover{
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(167, 253, 225);
 }
+.danger:hover{
+  background-color: black;
+  color: aqua;
+}
+
+.card-body{
+  --box-shadow-color: #3f3f3fc0;
+  box-shadow: 0 0 8px var(--box-shadow-color);
+  background-color: rgb(255, 243, 224);
+  padding: 5px;
+}
+  
