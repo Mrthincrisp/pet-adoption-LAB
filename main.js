@@ -245,7 +245,7 @@ const pets = [
   
 
 
-  const cardsOnDom = (array) => {
+  const cardsOnDom = (array) => {    //creates the baseline array for pets to be manipulated in
     let domString = "";
     
     for (let i = 0; i < array.length ; i++) {
@@ -267,9 +267,9 @@ const pets = [
 
   const targetingApp = document.querySelector('.card-cont') //targets/creates a variable; the container that will hold all the cards
 
-  const filter = (cardsOnDom, petType) =>{    //makes function with params -  cardsOnDom, petType
+  const filter = (cardsOnDom, petType) =>{    //makes function with params -  cardsOnDom(needs to be /is an array), petType
   return cardsOnDom.filter((member) =>    // filter() creates a new array,  member is the element/key that gets processed 
-    member.type === petType);         // member.type is the same as type on obj pets.type
+    member.type === petType);         // checks if/returns member.type is the same as type on obj pets.type
   };
   
   const allBtn = document.querySelector(`#all-btn`);
@@ -286,7 +286,7 @@ const pets = [
 
 dinoBtn.addEventListener("click", () => {const dinoArray = filter(pets, "dino"); // filter(array, petType)  ie pets and "dino"
   cardsOnDom(dinoArray)  // pushes the new array from filter
-  filterToggle = false
+  filterToggle = false //creates a toggle for filters to be used later
   console.log(dinoArray)
 });
 
@@ -328,14 +328,15 @@ const app = document.querySelector("#app");
 app.addEventListener("click", (e) =>{
 
   if (e.target.id.includes("delete")) {
-    const[, id] = e.target.id.split("--");
-    const index = pets.findIndex((pet) => pet.id === Number(id));
-    const pet = pets.find((p) => p.id === Number(id))
-    pets.splice(index, 1);     
-    switch (filterToggle) {
-      case false:        
-        const currentArray = filter(pets, pet.type);
-        cardsOnDom(currentArray);
+    const[, id] = e.target.id.split("--");    //creates array of the ids to be deleted 
+    const index = pets.findIndex((pet) => pet.id === Number(id));  //creates index vari containing a pet ID, and ensues its a number, used below
+    const pet = pets.find((p) => p.id === Number(id))   //cereates a pet vari to hold id number
+    pets.splice(index, 1);    // cuts out selected pet via index from above and removes only one item
+    switch (filterToggle) {  //   uses toggle filetes establish higher in code
+      case false:        // checks for a false filter 'tag'
+        const currentArray = filter(pets, pet.type);  //creates an array using the filter function made higher in code. being initiated if false
+                                                     //   was triggerd, so the deleted pet would be the same as the filter
+        cardsOnDom(currentArray);  //uses new array vari to push to dom
         break;
         default:
         cardsOnDom(pets)  
